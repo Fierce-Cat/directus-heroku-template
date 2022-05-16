@@ -1,0 +1,2354 @@
+version: 1
+directus: 9.10.0
+collections:
+  - collection: game_mod_packs
+    meta:
+      collection: game_mod_packs
+      icon: null
+      note: null
+      display_template: null
+      hidden: true
+      singleton: false
+      translations: null
+      archive_field: null
+      archive_app_filter: true
+      archive_value: null
+      unarchive_value: null
+      sort_field: null
+      accountability: all
+      color: null
+      item_duplication_fields: null
+      sort: null
+      group: null
+      collapse: open
+    schema:
+      name: game_mod_packs
+      sql: >-
+        CREATE TABLE "game_mod_packs" (`id` integer PRIMARY KEY AUTOINCREMENT
+        NOT NULL, `user_created` char(36) NULL, `date_created` datetime NULL,
+        `user_updated` char(36) NULL, `date_updated` datetime NULL, `name`
+        varchar(255) NULL, `version` varchar(255) NOT NULL DEFAULT null, `file`
+        char(36) NULL, `file_link` varchar(255) NULL, `description` text NULL,
+        `compatible_game_version` integer NULL, `belongto_mod` integer NULL,
+        CONSTRAINT `game_mod_packs_user_created_foreign` FOREIGN KEY
+        (`user_created`) REFERENCES `directus_users` (`id`), CONSTRAINT
+        `game_mod_packs_user_updated_foreign` FOREIGN KEY (`user_updated`)
+        REFERENCES `directus_users` (`id`), CONSTRAINT
+        `game_mod_packs_file_foreign` FOREIGN KEY (`file`) REFERENCES
+        `directus_files` (`id`) ON DELETE SET NULL, CONSTRAINT
+        `game_mod_packs_compatible_game_version_foreign` FOREIGN KEY
+        (`compatible_game_version`) REFERENCES `game_versions` (`id`) ON DELETE
+        SET NULL, CONSTRAINT `game_mod_packs_belongto_mod_foreign` FOREIGN KEY
+        (`belongto_mod`) REFERENCES `game_mods` (`id`) ON DELETE SET NULL)
+  - collection: game_mods
+    meta:
+      collection: game_mods
+      icon: null
+      note: null
+      display_template: null
+      hidden: false
+      singleton: false
+      translations: null
+      archive_field: status
+      archive_app_filter: true
+      archive_value: archived
+      unarchive_value: draft
+      sort_field: null
+      accountability: all
+      color: null
+      item_duplication_fields: null
+      sort: null
+      group: null
+      collapse: open
+    schema:
+      name: game_mods
+      sql: >-
+        CREATE TABLE "game_mods" (`id` integer PRIMARY KEY AUTOINCREMENT NOT
+        NULL, `status` varchar(255) NOT NULL DEFAULT 'draft', `user_created`
+        char(36) NULL, `date_created` datetime NULL, `user_updated` char(36)
+        NULL, `date_updated` datetime NULL, `identifier` char(36) NULL,
+        `abstract` varchar(255) NULL, `description` text NULL, `featured_image`
+        char(36) NULL, `author` varchar(255) NULL, `tags` json NULL, `license`
+        integer NULL, `name` text NULL, `belongto_game` varchar(255) NULL,
+        `categories` integer NULL, CONSTRAINT `game_mods_user_created_foreign`
+        FOREIGN KEY (`user_created`) REFERENCES `directus_users` (`id`),
+        CONSTRAINT `game_mods_user_updated_foreign` FOREIGN KEY (`user_updated`)
+        REFERENCES `directus_users` (`id`), CONSTRAINT
+        `game_mods_featured_image_foreign` FOREIGN KEY (`featured_image`)
+        REFERENCES `directus_files` (`id`) ON DELETE SET NULL, CONSTRAINT
+        `game_mods_license_foreign` FOREIGN KEY (`license`) REFERENCES `license`
+        (`id`) ON DELETE SET NULL, CONSTRAINT `game_mods_belongto_game_foreign`
+        FOREIGN KEY (`belongto_game`) REFERENCES `games` (`slug`) ON DELETE SET
+        NULL, CONSTRAINT `game_mods_categories_foreign` FOREIGN KEY
+        (`categories`) REFERENCES `mod_categories` (`id`) ON DELETE SET NULL)
+  - collection: game_mods_translations
+    meta:
+      collection: game_mods_translations
+      icon: import_export
+      note: null
+      display_template: null
+      hidden: true
+      singleton: false
+      translations: null
+      archive_field: null
+      archive_app_filter: true
+      archive_value: null
+      unarchive_value: null
+      sort_field: null
+      accountability: all
+      color: null
+      item_duplication_fields: null
+      sort: null
+      group: null
+      collapse: open
+    schema:
+      name: game_mods_translations
+      sql: >-
+        CREATE TABLE "game_mods_translations" (`id` integer PRIMARY KEY
+        AUTOINCREMENT NOT NULL, `game_mods_id` integer NULL, CONSTRAINT
+        `game_mods_translations_game_mods_id_foreign` FOREIGN KEY
+        (`game_mods_id`) REFERENCES `game_mods` (`id`) ON DELETE SET NULL)
+  - collection: game_versions
+    meta:
+      collection: game_versions
+      icon: null
+      note: null
+      display_template: null
+      hidden: true
+      singleton: false
+      translations: null
+      archive_field: null
+      archive_app_filter: true
+      archive_value: null
+      unarchive_value: null
+      sort_field: null
+      accountability: all
+      color: null
+      item_duplication_fields: null
+      sort: null
+      group: null
+      collapse: open
+    schema:
+      name: game_versions
+      sql: >-
+        CREATE TABLE "game_versions" (`id` integer PRIMARY KEY AUTOINCREMENT NOT
+        NULL, `version` text NULL, `belongto_game` varchar(255) NULL, CONSTRAINT
+        `game_versions_belongto_game_foreign` FOREIGN KEY (`belongto_game`)
+        REFERENCES `games` (`slug`) ON DELETE SET NULL)
+  - collection: games
+    meta:
+      collection: games
+      icon: null
+      note: null
+      display_template: null
+      hidden: false
+      singleton: false
+      translations: null
+      archive_field: null
+      archive_app_filter: true
+      archive_value: null
+      unarchive_value: null
+      sort_field: null
+      accountability: all
+      color: null
+      item_duplication_fields: null
+      sort: null
+      group: null
+      collapse: open
+    schema:
+      name: games
+      sql: >-
+        CREATE TABLE "games" (`slug` varchar(255) NOT NULL, `name` text NOT NULL
+        DEFAULT null, `featured_image` char(36) NULL, PRIMARY KEY (`slug`),
+        CONSTRAINT `games_featured_image_foreign` FOREIGN KEY (`featured_image`)
+        REFERENCES `directus_files` (`id`) ON DELETE SET NULL)
+  - collection: license
+    meta:
+      collection: license
+      icon: null
+      note: null
+      display_template: null
+      hidden: false
+      singleton: false
+      translations: null
+      archive_field: null
+      archive_app_filter: true
+      archive_value: null
+      unarchive_value: null
+      sort_field: null
+      accountability: all
+      color: null
+      item_duplication_fields: null
+      sort: null
+      group: null
+      collapse: open
+    schema:
+      name: license
+      sql: >-
+        CREATE TABLE "license" (`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+        `licence_name` text null)
+  - collection: mod_categories
+    meta:
+      collection: mod_categories
+      icon: null
+      note: null
+      display_template: null
+      hidden: false
+      singleton: false
+      translations: null
+      archive_field: null
+      archive_app_filter: true
+      archive_value: null
+      unarchive_value: null
+      sort_field: null
+      accountability: all
+      color: null
+      item_duplication_fields: null
+      sort: null
+      group: null
+      collapse: open
+    schema:
+      name: mod_categories
+      sql: >-
+        CREATE TABLE "mod_categories" (`id` integer PRIMARY KEY AUTOINCREMENT
+        NOT NULL, `date_created` datetime NULL, `name` varchar(255) NULL, `game`
+        varchar(255) NULL, `icon` varchar(255) null, CONSTRAINT
+        `mod_categories_game_foreign` FOREIGN KEY (`game`) REFERENCES `games`
+        (`slug`) ON DELETE SET NULL)
+fields:
+  - collection: license
+    field: id
+    type: integer
+    schema:
+      name: id
+      table: license
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: true
+      has_auto_increment: true
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: license
+      field: id
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: true
+      hidden: true
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: license
+    field: licence_name
+    type: text
+    schema:
+      name: licence_name
+      table: license
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: license
+      field: licence_name
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_versions
+    field: id
+    type: integer
+    schema:
+      name: id
+      table: game_versions
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: true
+      has_auto_increment: true
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_versions
+      field: id
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: true
+      hidden: true
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_versions
+    field: version
+    type: text
+    schema:
+      name: version
+      table: game_versions
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_versions
+      field: version
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_versions
+    field: belongto_game
+    type: string
+    schema:
+      name: belongto_game
+      table: game_versions
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: slug
+      foreign_key_table: games
+    meta:
+      collection: game_versions
+      field: belongto_game
+      special: null
+      interface: select-dropdown-m2o
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: true
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: id
+    type: integer
+    schema:
+      name: id
+      table: game_mod_packs
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: true
+      has_auto_increment: true
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mod_packs
+      field: id
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: true
+      hidden: true
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: user_created
+    type: string
+    schema:
+      name: user_created
+      table: game_mod_packs
+      data_type: char
+      default_value: null
+      max_length: 36
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: directus_users
+    meta:
+      collection: game_mod_packs
+      field: user_created
+      special:
+        - user-created
+      interface: select-dropdown-m2o
+      options:
+        template: '{{avatar.$thumbnail}} {{first_name}} {{last_name}}'
+      display: user
+      display_options: null
+      readonly: true
+      hidden: true
+      sort: null
+      width: half
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: date_created
+    type: dateTime
+    schema:
+      name: date_created
+      table: game_mod_packs
+      data_type: datetime
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mod_packs
+      field: date_created
+      special:
+        - date-created
+      interface: datetime
+      options: null
+      display: datetime
+      display_options:
+        relative: true
+      readonly: true
+      hidden: true
+      sort: null
+      width: half
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: user_updated
+    type: string
+    schema:
+      name: user_updated
+      table: game_mod_packs
+      data_type: char
+      default_value: null
+      max_length: 36
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: directus_users
+    meta:
+      collection: game_mod_packs
+      field: user_updated
+      special:
+        - user-updated
+      interface: select-dropdown-m2o
+      options:
+        template: '{{avatar.$thumbnail}} {{first_name}} {{last_name}}'
+      display: user
+      display_options: null
+      readonly: true
+      hidden: true
+      sort: null
+      width: half
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: date_updated
+    type: dateTime
+    schema:
+      name: date_updated
+      table: game_mod_packs
+      data_type: datetime
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mod_packs
+      field: date_updated
+      special:
+        - date-updated
+      interface: datetime
+      options: null
+      display: datetime
+      display_options:
+        relative: true
+      readonly: true
+      hidden: true
+      sort: null
+      width: half
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: name
+    type: string
+    schema:
+      name: name
+      table: game_mod_packs
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mod_packs
+      field: name
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: version
+    type: string
+    schema:
+      name: version
+      table: game_mod_packs
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mod_packs
+      field: version
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: file
+    type: uuid
+    schema:
+      name: file
+      table: game_mod_packs
+      data_type: char
+      default_value: null
+      max_length: 36
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: directus_files
+    meta:
+      collection: game_mod_packs
+      field: file
+      special:
+        - file
+      interface: file
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: file_link
+    type: string
+    schema:
+      name: file_link
+      table: game_mod_packs
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mod_packs
+      field: file_link
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: description
+    type: text
+    schema:
+      name: description
+      table: game_mod_packs
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mod_packs
+      field: description
+      special: null
+      interface: input-rich-text-md
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: compatible_game_version
+    type: integer
+    schema:
+      name: compatible_game_version
+      table: game_mod_packs
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: game_versions
+    meta:
+      collection: game_mod_packs
+      field: compatible_game_version
+      special:
+        - m2o
+      interface: select-dropdown-m2o
+      options:
+        template: '{{version}}'
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mod_packs
+    field: belongto_mod
+    type: integer
+    schema:
+      name: belongto_mod
+      table: game_mod_packs
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: game_mods
+    meta:
+      collection: game_mod_packs
+      field: belongto_mod
+      special: null
+      interface: select-dropdown-m2o
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: true
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: games
+    field: slug
+    type: string
+    schema:
+      name: slug
+      table: games
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: games
+      field: slug
+      special: null
+      interface: input
+      options:
+        slug: true
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: games
+    field: name
+    type: text
+    schema:
+      name: name
+      table: games
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: games
+      field: name
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: games
+    field: featured_image
+    type: uuid
+    schema:
+      name: featured_image
+      table: games
+      data_type: char
+      default_value: null
+      max_length: 36
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: directus_files
+    meta:
+      collection: games
+      field: featured_image
+      special:
+        - file
+      interface: file-image
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods_translations
+    field: id
+    type: integer
+    schema:
+      name: id
+      table: game_mods_translations
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: true
+      has_auto_increment: true
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods_translations
+      field: id
+      special: null
+      interface: null
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: true
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods_translations
+    field: game_mods_id
+    type: integer
+    schema:
+      name: game_mods_id
+      table: game_mods_translations
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: game_mods
+    meta:
+      collection: game_mods_translations
+      field: game_mods_id
+      special: null
+      interface: null
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: true
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: id
+    type: integer
+    schema:
+      name: id
+      table: game_mods
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: true
+      has_auto_increment: true
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods
+      field: id
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: true
+      hidden: true
+      sort: 13
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: status
+    type: string
+    schema:
+      name: status
+      table: game_mods
+      data_type: varchar
+      default_value: draft
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods
+      field: status
+      special: null
+      interface: select-dropdown
+      options:
+        choices:
+          - text: $t:published
+            value: published
+          - text: $t:draft
+            value: draft
+          - text: $t:archived
+            value: archived
+      display: labels
+      display_options:
+        showAsDot: true
+        choices:
+          - text: $t:published
+            value: published
+            foreground: '#FFFFFF'
+            background: var(--primary)
+          - text: $t:draft
+            value: draft
+            foreground: '#18222F'
+            background: '#D3DAE4'
+          - text: $t:archived
+            value: archived
+            foreground: '#FFFFFF'
+            background: var(--warning)
+      readonly: false
+      hidden: false
+      sort: 3
+      width: half
+      translations:
+        - language: zh-CN
+          translation: 状态
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: user_created
+    type: string
+    schema:
+      name: user_created
+      table: game_mods
+      data_type: char
+      default_value: null
+      max_length: 36
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: directus_users
+    meta:
+      collection: game_mods
+      field: user_created
+      special:
+        - user-created
+      interface: select-dropdown-m2o
+      options:
+        template: '{{avatar.$thumbnail}} {{first_name}} {{last_name}}'
+      display: user
+      display_options: null
+      readonly: true
+      hidden: true
+      sort: 14
+      width: half
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: date_created
+    type: dateTime
+    schema:
+      name: date_created
+      table: game_mods
+      data_type: datetime
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods
+      field: date_created
+      special:
+        - date-created
+      interface: datetime
+      options: null
+      display: datetime
+      display_options:
+        relative: true
+      readonly: true
+      hidden: true
+      sort: 15
+      width: half
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: user_updated
+    type: string
+    schema:
+      name: user_updated
+      table: game_mods
+      data_type: char
+      default_value: null
+      max_length: 36
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: directus_users
+    meta:
+      collection: game_mods
+      field: user_updated
+      special:
+        - user-updated
+      interface: select-dropdown-m2o
+      options:
+        template: '{{avatar.$thumbnail}} {{first_name}} {{last_name}}'
+      display: user
+      display_options: null
+      readonly: true
+      hidden: true
+      sort: 16
+      width: half
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: date_updated
+    type: dateTime
+    schema:
+      name: date_updated
+      table: game_mods
+      data_type: datetime
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods
+      field: date_updated
+      special:
+        - date-updated
+      interface: datetime
+      options: null
+      display: datetime
+      display_options:
+        relative: true
+      readonly: true
+      hidden: true
+      sort: 17
+      width: half
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: identifier
+    type: uuid
+    schema:
+      name: identifier
+      table: game_mods
+      data_type: char
+      default_value: null
+      max_length: 36
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods
+      field: identifier
+      special:
+        - uuid
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: 4
+      width: half
+      translations:
+        - language: zh-CN
+          translation: 识别符
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: abstract
+    type: string
+    schema:
+      name: abstract
+      table: game_mods
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods
+      field: abstract
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: 7
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: description
+    type: text
+    schema:
+      name: description
+      table: game_mods
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods
+      field: description
+      special: null
+      interface: input-rich-text-md
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: 10
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: featured_image
+    type: uuid
+    schema:
+      name: featured_image
+      table: game_mods
+      data_type: char
+      default_value: null
+      max_length: 36
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: directus_files
+    meta:
+      collection: game_mods
+      field: featured_image
+      special:
+        - file
+      interface: file-image
+      options: {}
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: 2
+      width: full
+      translations:
+        - language: zh-CN
+          translation: 特色图片
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: author
+    type: string
+    schema:
+      name: author
+      table: game_mods
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods
+      field: author
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: 8
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: tags
+    type: json
+    schema:
+      name: tags
+      table: game_mods
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods
+      field: tags
+      special:
+        - cast-json
+      interface: tags
+      options:
+        alphabetize: true
+        whitespace: '-'
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: 11
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: license
+    type: integer
+    schema:
+      name: license
+      table: game_mods
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: license
+    meta:
+      collection: game_mods
+      field: license
+      special:
+        - m2o
+      interface: select-dropdown-m2o
+      options:
+        template: '{{licence_name}}'
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: 9
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: name
+    type: text
+    schema:
+      name: name
+      table: game_mods
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: game_mods
+      field: name
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: 1
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: belongto_game
+    type: string
+    schema:
+      name: belongto_game
+      table: game_mods
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: slug
+      foreign_key_table: games
+    meta:
+      collection: game_mods
+      field: belongto_game
+      special: null
+      interface: select-dropdown-m2o
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: 5
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: categories
+    type: integer
+    schema:
+      name: categories
+      table: game_mods
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: id
+      foreign_key_table: mod_categories
+    meta:
+      collection: game_mods
+      field: categories
+      special: null
+      interface: select-dropdown-m2o
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: 6
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: mod_categories
+    field: id
+    type: integer
+    schema:
+      name: id
+      table: mod_categories
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: true
+      has_auto_increment: true
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: mod_categories
+      field: id
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: true
+      hidden: true
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: mod_categories
+    field: date_created
+    type: timestamp
+    schema:
+      name: date_created
+      table: mod_categories
+      data_type: datetime
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: mod_categories
+      field: date_created
+      special:
+        - date-created
+        - cast-timestamp
+      interface: datetime
+      options: null
+      display: datetime
+      display_options:
+        relative: true
+      readonly: true
+      hidden: true
+      sort: null
+      width: half
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: mod_categories
+    field: name
+    type: string
+    schema:
+      name: name
+      table: mod_categories
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: mod_categories
+      field: name
+      special: null
+      interface: input
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: mod_categories
+    field: game
+    type: string
+    schema:
+      name: game
+      table: mod_categories
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: slug
+      foreign_key_table: games
+    meta:
+      collection: mod_categories
+      field: game
+      special: null
+      interface: select-dropdown-m2o
+      options: null
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: mod_categories
+    field: icon
+    type: string
+    schema:
+      name: icon
+      table: mod_categories
+      data_type: varchar
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_generated: false
+      generation_expression: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      has_auto_increment: false
+      foreign_key_column: null
+      foreign_key_table: null
+    meta:
+      collection: mod_categories
+      field: icon
+      special: null
+      interface: select-icon
+      options: null
+      display: collection
+      display_options:
+        conditionalFormatting: null
+        icon: true
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: game_mods
+    field: packs
+    type: alias
+    schema: null
+    meta:
+      collection: game_mods
+      field: packs
+      special:
+        - o2m
+      interface: list-o2m
+      options:
+        template: '{{name}}{{version}}'
+      display: related-values
+      display_options:
+        template: '{{version}}'
+      readonly: false
+      hidden: false
+      sort: 12
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: games
+    field: versions
+    type: alias
+    schema: null
+    meta:
+      collection: games
+      field: versions
+      special:
+        - o2m
+      interface: list-o2m
+      options:
+        template: '{{version}}'
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: games
+    field: mods
+    type: alias
+    schema: null
+    meta:
+      collection: games
+      field: mods
+      special:
+        - o2m
+      interface: list-o2m
+      options:
+        template: '{{name}}'
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: mod_categories
+    field: mods
+    type: alias
+    schema: null
+    meta:
+      collection: mod_categories
+      field: mods
+      special:
+        - o2m
+      interface: list-o2m
+      options:
+        template: '{{name}}'
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+  - collection: games
+    field: mod_categories
+    type: alias
+    schema: null
+    meta:
+      collection: games
+      field: mod_categories
+      special:
+        - o2m
+      interface: list-o2m
+      options:
+        template: '{{name}}'
+      display: null
+      display_options: null
+      readonly: false
+      hidden: false
+      sort: null
+      width: full
+      translations: null
+      note: null
+      conditions: null
+      required: false
+      group: null
+      validation: null
+      validation_message: null
+relations:
+  - collection: game_versions
+    field: belongto_game
+    related_collection: games
+    schema:
+      table: game_versions
+      column: belongto_game
+      foreign_key_table: games
+      foreign_key_column: slug
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: game_versions
+      many_field: belongto_game
+      one_collection: games
+      one_field: versions
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mod_packs
+    field: belongto_mod
+    related_collection: game_mods
+    schema:
+      table: game_mod_packs
+      column: belongto_mod
+      foreign_key_table: game_mods
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: game_mod_packs
+      many_field: belongto_mod
+      one_collection: game_mods
+      one_field: packs
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: date_updated
+      one_deselect_action: nullify
+  - collection: game_mod_packs
+    field: compatible_game_version
+    related_collection: game_versions
+    schema:
+      table: game_mod_packs
+      column: compatible_game_version
+      foreign_key_table: game_versions
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: game_mod_packs
+      many_field: compatible_game_version
+      one_collection: game_versions
+      one_field: null
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mod_packs
+    field: file
+    related_collection: directus_files
+    schema:
+      table: game_mod_packs
+      column: file
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: game_mod_packs
+      many_field: file
+      one_collection: directus_files
+      one_field: null
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mod_packs
+    field: user_updated
+    related_collection: directus_users
+    schema:
+      table: game_mod_packs
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: NO ACTION
+      constraint_name: null
+    meta:
+      many_collection: game_mod_packs
+      many_field: user_updated
+      one_collection: directus_users
+      one_field: null
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mod_packs
+    field: user_created
+    related_collection: directus_users
+    schema:
+      table: game_mod_packs
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: NO ACTION
+      constraint_name: null
+    meta:
+      many_collection: game_mod_packs
+      many_field: user_created
+      one_collection: directus_users
+      one_field: null
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: games
+    field: featured_image
+    related_collection: directus_files
+    schema:
+      table: games
+      column: featured_image
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: games
+      many_field: featured_image
+      one_collection: directus_files
+      one_field: null
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mods_translations
+    field: game_mods_id
+    related_collection: game_mods
+    schema:
+      table: game_mods_translations
+      column: game_mods_id
+      foreign_key_table: game_mods
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: game_mods_translations
+      many_field: game_mods_id
+      one_collection: game_mods
+      one_field: null
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: game_mods_id
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mods
+    field: categories
+    related_collection: mod_categories
+    schema:
+      table: game_mods
+      column: categories
+      foreign_key_table: mod_categories
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: game_mods
+      many_field: categories
+      one_collection: mod_categories
+      one_field: mods
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mods
+    field: belongto_game
+    related_collection: games
+    schema:
+      table: game_mods
+      column: belongto_game
+      foreign_key_table: games
+      foreign_key_column: slug
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: game_mods
+      many_field: belongto_game
+      one_collection: games
+      one_field: mods
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mods
+    field: license
+    related_collection: license
+    schema:
+      table: game_mods
+      column: license
+      foreign_key_table: license
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: game_mods
+      many_field: license
+      one_collection: license
+      one_field: null
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mods
+    field: featured_image
+    related_collection: directus_files
+    schema:
+      table: game_mods
+      column: featured_image
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: game_mods
+      many_field: featured_image
+      one_collection: directus_files
+      one_field: null
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mods
+    field: user_updated
+    related_collection: directus_users
+    schema:
+      table: game_mods
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: NO ACTION
+      constraint_name: null
+    meta:
+      many_collection: game_mods
+      many_field: user_updated
+      one_collection: directus_users
+      one_field: null
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: game_mods
+    field: user_created
+    related_collection: directus_users
+    schema:
+      table: game_mods
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      on_update: NO ACTION
+      on_delete: NO ACTION
+      constraint_name: null
+    meta:
+      many_collection: game_mods
+      many_field: user_created
+      one_collection: directus_users
+      one_field: null
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
+  - collection: mod_categories
+    field: game
+    related_collection: games
+    schema:
+      table: mod_categories
+      column: game
+      foreign_key_table: games
+      foreign_key_column: slug
+      on_update: NO ACTION
+      on_delete: SET NULL
+      constraint_name: null
+    meta:
+      many_collection: mod_categories
+      many_field: game
+      one_collection: games
+      one_field: mod_categories
+      one_collection_field: null
+      one_allowed_collections: null
+      junction_field: null
+      sort_field: null
+      one_deselect_action: nullify
