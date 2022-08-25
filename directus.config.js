@@ -3,6 +3,8 @@ module.exports = {
   DB_CONNECTION_STRING:
     (process.env.DATABASE_CONNECTION_POOL_URL || process.env.DATABASE_URL) +
     '?sslmode=no-verify',
+  // Reference: https://docs.railway.app/deploy/exposing-your-app
+  PORT: process.env.PORT,
   RATE_LIMITER_REDIS: process.env.RATE_LIMITER_REDIS || process.env.REDIS_URL,
   CACHE_REDIS: process.env.CACHE_REDIS || process.env.REDIS_URL,
   EMAIL_FROM: process.env.EMAIL_FROM || process.env.MAILGUN_SMTP_LOGIN,
