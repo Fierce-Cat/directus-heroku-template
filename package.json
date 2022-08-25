@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "directus": "^9.15.1",
+    "directus-extension-editorjs": "^1.5.0",
     "pg": "^8.5.1"
   }
 }
