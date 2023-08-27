@@ -6,6 +6,7 @@
     "node": "18.x"
   },
   "scripts": {
+    "build": "pnpm --recursive --filter '!docs' run build",
     "start": "directus start"
   },
   "dependencies": {
