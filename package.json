@@ -9,8 +9,8 @@
     "start": "directus start"
   },
   "dependencies": {
-    "directus": "^10.5.1",
+    "directus": "^10.5.3",
     "directus-extension-editorjs": "^1.5.0",
-    "pg": "^8.11.0"
+    "pg": "^8.11.3"
   }
 }
