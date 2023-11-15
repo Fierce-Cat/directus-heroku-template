@@ -1,7 +1,7 @@
 # Build plan from the provider
 providers = ['...', 'python']
 #[phases.setup]
-[phases.build]
+[phases.release]
 cmd = "sleep 3s && npx directus bootstrap"
 
 #nixPkgs = ['...', "gccStdenv", "python39", "libgcc"]
