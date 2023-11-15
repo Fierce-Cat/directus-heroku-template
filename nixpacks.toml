@@ -1,5 +1,5 @@
 # Build plan from the provider
-providers = ['...', 'python']
+#providers = ['...', 'python']
 #[phases.setup]
 [phases.release]
 cmd = "sleep 3s && npx directus bootstrap"
